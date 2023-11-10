@@ -1,0 +1,26 @@
+@startuml 新規登録のシーケンス図
+
+actor ユーザ as user
+
+boundary 会員登録画面 as member_registration
+boundary 登録完了画面 as members_complete
+control 会員登録処理 as registration_process
+control エラーメッセージの処理 as error_process
+entity 会員テーブル as member_table
+
+user -> member_registration
+member_registration -> registration_process
+registration_process -> member_table
+members_complete <- registration_process
+
+alt 入力チェック失敗
+    registration_process -> error_process
+    member_registration <- error_process
+else DB接続断
+    
+    registration_process -> member_table
+    error_process <- member_table
+    member_registration <- error_process
+end
+
+@enduml
